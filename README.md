@@ -35,7 +35,7 @@ data source:
 var body: some View {
     PageView(selection: $selection) {
         ForEach(1...10, id: \.self) { id in
-            Text("Page \(value)")
+            Text("Page \(id)")
         }
     }
     .pageViewStyle(.scroll)
