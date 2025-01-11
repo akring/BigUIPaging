@@ -38,6 +38,7 @@ struct CardDeckPageView: View {
     
     @Environment(\.cardCornerRadius) private var cornerRadius
     @Environment(\.cardShadowDisabled) private var shadowDisabled
+    @Environment(\.cardDeckSnapThreshold) private var snapThreshold
 
     init(_ configuration: Configuration) {
         self.configuration = configuration
@@ -89,8 +90,7 @@ struct CardDeckPageView: View {
     }
     
     func snapToNearestIndex() {
-        let threshold = 0.3
-        if abs(dragProgress) < threshold {
+        if abs(dragProgress) < snapThreshold {
             withAnimation(.bouncy) {
                 self.dragProgress = 0.0
             }
@@ -172,18 +172,27 @@ extension EnvironmentValues {
         static var defaultValue: Double? = nil
     }
     
+    struct CardShadowDisabled: EnvironmentKey {
+        static var defaultValue: Bool = false
+    }
+    
+    struct CardDeckSnapThreshold: EnvironmentKey {
+        static var defaultValue: Double = 0.3
+    }
+    
     var cardCornerRadius: Double? {
         get { self[CardCornerRadius.self] }
         set { self[CardCornerRadius.self] = newValue }
     }
     
-    struct CardShadowDisabled: EnvironmentKey {
-        static var defaultValue: Bool = false
-    }
-    
     var cardShadowDisabled: Bool {
         get { self[CardShadowDisabled.self] }
         set { self[CardShadowDisabled.self] = newValue }
+    }
+    
+    var cardDeckSnapThreshold: Double {
+        get { self[CardDeckSnapThreshold.self] }
+        set { self[CardDeckSnapThreshold.self] = newValue }
     }
 }
 
@@ -199,6 +208,11 @@ extension View {
     /// Controls the shadow visibility of a page when presented in ``CardDeckPageViewStyle``.
     public func pageViewCardShadow(_ visibility: Visibility) -> some View {
         self.environment(\.cardShadowDisabled, visibility == .hidden)
+    }
+    
+    /// Controls the snap threshold of a page when presented in ``CardDeckPageViewStyle``.
+    public func pageViewCardDeckSnapThreshold(_ threshold: Double) -> some View {
+        self.environment(\.cardDeckSnapThreshold, threshold)
     }
     
     @ViewBuilder

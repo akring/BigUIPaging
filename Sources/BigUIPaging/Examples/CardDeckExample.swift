@@ -6,6 +6,8 @@ struct CardDeckExample: View {
     
     @State private var selection: Int = 1
     private let totalPages = 10
+  
+  @State var visiable: Bool = true
     
     var body: some View {
         VStack {
@@ -27,6 +29,7 @@ struct CardDeckExample: View {
             .onTapGesture {
                 print("Tapped card \(selection)")
             }
+            .pageViewCardDeckSnapThreshold(visiable ? 0.5 : 1.0)
             
             PageIndicator(
                 selection: indicatorSelection,
@@ -34,6 +37,12 @@ struct CardDeckExample: View {
             )
             .pageIndicatorColor(.secondary.opacity(0.3))
             .pageIndicatorCurrentColor(selection.color)
+          
+          Button {
+            visiable.toggle()
+          } label: {
+            Text(visiable ? "Enabled" : "Disabled")
+          }
         }
     }
     
