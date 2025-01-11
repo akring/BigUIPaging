@@ -1,5 +1,9 @@
 import SwiftUI
 
+public extension Notification.Name {
+    static let cardDeckPageViewWillSwitch = Notification.Name("cardDeckPageViewWillSwitch")
+}
+
 /// A style that arranges pages as a whimsical deck of cards.
 ///
 /// This style mimics the behaviour of the photo stack in iMessage and Big News.
@@ -90,6 +94,8 @@ struct CardDeckPageView: View {
     }
     
     func snapToNearestIndex() {
+        NotificationCenter.default.post(name: .cardDeckPageViewWillSwitch, object: nil)
+        
         if abs(dragProgress) < snapThreshold {
             withAnimation(.bouncy) {
                 self.dragProgress = 0.0
